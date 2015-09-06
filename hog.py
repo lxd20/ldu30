@@ -35,23 +35,27 @@ def roll_dice(num_rolls, dice=six_sided):
     # END Question 1
 
 
-def is_prime(x):
-       x = 1
-    if total == 1:
+
+
+def is_prime(total):
+    x = 2
+    if total == 1 or total ==0:
         return False
     while (x < total):
-        x = x+1
         if (total % x == 0):
             return False
+        x = x+1
     return True
+
 
 def next_prime(y):
     n = y+1
     while True:
-        if is_prime (n):
+        if is_prime(n):
             return n
         n = n+1
-    
+
+
 def take_turn(num_rolls, opponent_score, dice=six_sided):
     """Simulate a turn rolling NUM_ROLLS dice, which may be 0 (Free bacon).
 
@@ -64,8 +68,16 @@ def take_turn(num_rolls, opponent_score, dice=six_sided):
     assert num_rolls <= 10, 'Cannot roll more than 10 dice.'
     assert opponent_score < 100, 'The game should be over.'
     # BEGIN Question 2
-
-
+    sum = 0
+    if num_rolls ==0:
+        x = opponent_score%10
+        y = (opponent_score -x)//10
+        sum = max(x,y)+1
+    else:
+        sum = roll_dice(num_rolls, dice)
+    if is_prime(sum):
+        sum = next_prime(sum)
+    return sum
 
 
     # END Question 2
@@ -76,7 +88,12 @@ def select_dice(score, opponent_score):
     multiple of 7, in which case select four-sided dice (Hog wild).
     """
     # BEGIN Question 3
-    "*** REPLACE THIS LINE ***"
+    if (score+opponent_score) % 7 == 0:
+        return four_sided
+    else:
+        return six_sided
+
+
     # END Question 3
 
 
@@ -85,7 +102,25 @@ def is_swap(score0, score1):
     versions of each other, such as 19 and 91.
     """
     # BEGIN Question 4
-    "*** REPLACE THIS LINE ***"
+    if(score0 < 10):
+        x1 = 0
+        y1 = score0
+    else:
+        n1 = score0%100
+        y1 = n1%10
+        x1 = (n1 -y1)/10
+
+    if (score1<10):
+        x2 = 0
+        y2 = score1
+    else:
+        n2 = score1%100
+        y2 = n2%10
+        x2 = (n2 -y2)/10
+    return x1 == y2 and y1 == x2
+
+
+
     # END Question 4
 
 
@@ -93,7 +128,6 @@ def other(who):
     """Return the other player, for a player WHO numbered 0 or 1.
 
     >>> other(0)
-    1
     >>> other(1)
     0
     """
@@ -101,6 +135,8 @@ def other(who):
 
 
 def play(strategy0, strategy1, score0=0, score1=0, goal=GOAL_SCORE):
+
+
     """Simulate a game and return the final scores of both players, with
     Player 0's score first, and Player 1's score second.
 
@@ -115,9 +151,21 @@ def play(strategy0, strategy1, score0=0, score1=0, goal=GOAL_SCORE):
     """
     who = 0  # Which player is about to take a turn, 0 (first) or 1 (second)
     # BEGIN Question 5
-    "*** REPLACE THIS LINE ***"
+   # while(score0 < goal and score1 < goal):
+
+
+
+        #call the who function last
+
+
+
+
+
     # END Question 5
     return score0, score1
+
+
+
 
 
 #######################
