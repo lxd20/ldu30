@@ -43,10 +43,14 @@ def is_prime(x):
         x = x+1
         if (total % x == 0):
             return False
-     return True
+    return True
 
 def next_prime(y):
-    return 3
+    n = y+1
+    while True:
+        if is_prime (n):
+            return n
+        n = n+1
     
 def take_turn(num_rolls, opponent_score, dice=six_sided):
     """Simulate a turn rolling NUM_ROLLS dice, which may be 0 (Free bacon).
