@@ -36,7 +36,14 @@ def roll_dice(num_rolls, dice=six_sided):
 
 
 def is_prime(x):
-    return True
+       x = 1
+    if total == 1:
+        return False
+    while (x < total):
+        x = x+1
+        if (total % x == 0):
+            return False
+     return True
 
 def next_prime(y):
     return 3
