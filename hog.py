@@ -35,6 +35,12 @@ def roll_dice(num_rolls, dice=six_sided):
     # END Question 1
 
 
+def is_prime(x):
+    return True
+
+def next_prime(y):
+    return 3
+    
 def take_turn(num_rolls, opponent_score, dice=six_sided):
     """Simulate a turn rolling NUM_ROLLS dice, which may be 0 (Free bacon).
 
