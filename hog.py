@@ -151,19 +151,29 @@ def play(strategy0, strategy1, score0=0, score1=0, goal=GOAL_SCORE):
     """
     who = 0  # Which player is about to take a turn, 0 (first) or 1 (second)
     # BEGIN Question 5
-   # while(score0 < goal and score1 < goal):
-
-
-
-        #call the who function last
-
-
-
-
+    dice = six_sided
+    while(score0 < goal and score1 < goal):
+        if who == 0:
+            sum = take_turn(strategy0(score0,score1), score1, dice)
+            if sum == 0:
+                score1 += strategy0(score0,score1)
+            else:
+                score0 += sum
+        else:
+            sum = take_turn(strategy1(score1,score0), score0, dice)
+            if sum == 0:
+                score0 += strategy1(score1,score0)
+            else:
+                score1 += sum
+        if is_swap(score0, score1):
+            temp = score0
+            score0 = score1
+            score1 = temp
+        dice  = select_dice(score0, score1)
+        who = other(who)
 
     # END Question 5
     return score0, score1
-
 
 
 
