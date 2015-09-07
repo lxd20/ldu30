@@ -152,15 +152,15 @@ def play(strategy0, strategy1, score0=0, score1=0, goal=GOAL_SCORE):
     who = 0  # Which player is about to take a turn, 0 (first) or 1 (second)
     # BEGIN Question 5
     dice = six_sided
-    while(score0 < goal and score1 < goal):
+    while score0 < goal and score1 < goal:
         if who == 0:
-            sum = take_turn(strategy0(score0,score1), score1, dice)
+            sum = take_turn(strategy0(score0,score1), score1, select_dice(score0, score1))
             if sum == 0:
                 score1 += strategy0(score0,score1)
             else:
                 score0 += sum
         else:
-            sum = take_turn(strategy1(score1,score0), score0, dice)
+            sum = take_turn(strategy1(score1,score0), score0, select_dice(score0, score1))
             if sum == 0:
                 score0 += strategy1(score1,score0)
             else:
@@ -169,7 +169,6 @@ def play(strategy0, strategy1, score0=0, score1=0, goal=GOAL_SCORE):
             temp = score0
             score0 = score1
             score1 = temp
-        dice  = select_dice(score0, score1)
         who = other(who)
 
     # END Question 5
@@ -203,8 +202,9 @@ def always_roll(n):
 
 
 # Experiments
-
 def make_averaged(fn, num_samples=1000):
+
+
     """Return a function that returns the average_value of FN when called.
 
     To implement this function, you will have to use *args syntax, a new Python
@@ -224,10 +224,17 @@ def make_averaged(fn, num_samples=1000):
     Note that the last example uses roll_dice so the hogtimus prime rule does
     not apply.
     """
-    # BEGIN Question 6
-    "*** REPLACE THIS LINE ***"
-    # END Question 6
 
+    def func(*args):
+        nonlocal num_samples
+        total = 0
+        x = num_samples
+        while x > 0:
+            result = fn(*args)
+            total += result
+            x -= 1
+        return total / num_samples
+    return func
 
 def max_scoring_num_rolls(dice=six_sided, num_samples=1000):
     """Return the number of dice (1 to 10) that gives the highest average turn
@@ -241,6 +248,11 @@ def max_scoring_num_rolls(dice=six_sided, num_samples=1000):
     # BEGIN Question 7
     "*** REPLACE THIS LINE ***"
     # END Question 7
+
+def linear(a, b):
+    def result(x):
+        return a * x + b
+    return result
 
 
 def winner(strategy0, strategy1):
