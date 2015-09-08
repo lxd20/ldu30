@@ -175,8 +175,6 @@ def play(strategy0, strategy1, score0=0, score1=0, goal=GOAL_SCORE):
     return score0, score1
 
 
-
-
 #######################
 # Phase 2: Strategies #
 #######################
@@ -246,13 +244,20 @@ def max_scoring_num_rolls(dice=six_sided, num_samples=1000):
     10
     """
     # BEGIN Question 7
-    "*** REPLACE THIS LINE ***"
+    max_average = 0
+    max_roll = 1
+    x = 1
+    while x <= 10:
+        average = make_averaged(roll_dice, num_samples)
+        n = average(x, dice)
+        if n > max_average:
+            max_average = n
+            max_roll = x
+        x += 1
+    return max_roll
+
     # END Question 7
 
-def linear(a, b):
-    def result(x):
-        return a * x + b
-    return result
 
 
 def winner(strategy0, strategy1):
@@ -300,10 +305,13 @@ def bacon_strategy(score, opponent_score, margin=8, num_rolls=5):
     """This strategy rolls 0 dice if that gives at least MARGIN points,
     and rolls NUM_ROLLS otherwise.
     """
-    if margin <= take_turn (0, opponent_score): 
+    # BEGIN Question 8
+
+    if (margin<=take_turn(0, opponent_score)):
         return 0
     else:
-        return num_rolls   # Replace this statement
+        return num_rolls
+
     # END Question 8
 
 
@@ -312,19 +320,76 @@ def swap_strategy(score, opponent_score, num_rolls=5):
     rolls NUM_ROLLS otherwise.
     """
     # BEGIN Question 9
-    "*** REPLACE THIS LINE ***"
-    return 5  # Replace this statement
+    test = score +take_turn(0, opponent_score)
+    if is_swap(test, opponent_score):
+        if (test < opponent_score):
+            return 0
+    return num_rolls
+
     # END Question 9
+
+
+def play_strategy(num_rolls, score0, score1):
+    sum = take_turn(num_rolls, score1, select_dice(score0, score1))
+    if sum == 0:
+        score1 += num_rolls
+    else:
+        score0 += sum
+    if is_swap(score0, score1):
+        temp = score0
+        score0 = score1
+        score1 = temp
+
+    sum = take_turn(5, score0, select_dice(score0, score1))
+    if sum == 0:
+        score0 += num_rolls
+    else:
+        score1 += sum
+    if is_swap(score0, score1):
+        temp = score0
+        score0 = score1
+        score1 = temp
+
+    return score0 - score1
 
 
 def final_strategy(score, opponent_score):
     """Write a brief description of your final strategy.
-
-    *** YOUR DESCRIPTION HERE ***
+    The code checks whether using swap_strategy or bacon_strategy can provide a score
+    greater than 6 for a six_sided dice or 3 for a four_sided dice. If not, then I
+    either roll 4 six_sided dices or 2 four_sided dices. I roll 0 if the sum of two total scores
+    is a multiple of 7. I also roll 0 if the Goal_Score-score is at least 2 less than
+    the value of the take_turn score. I roll 1 if the Goal_score-score is less than 2.
     """
     # BEGIN Question 10
-    "*** REPLACE THIS LINE ***"
-    return 5  # Replace this statement
+    dice = select_dice(score, opponent_score)
+    x = take_turn(0, opponent_score)
+    if (score + x+opponent_score) % 7 == 0:
+        return 0
+    if (GOAL_SCORE-score) < 2:
+        return 1
+    if ((GOAL_SCORE-score) <= x+2) and (not is_swap(score + x, opponent_score)):
+        return 0
+    if dice == six_sided:
+        if swap_strategy(score, opponent_score) == 0:
+            swap_diff= opponent_score -(score+x)
+            if swap_diff>6:
+                return 0
+        if not is_swap(score+x, opponent_score):
+            return bacon_strategy(score,opponent_score,6,4)
+        else:
+            return 4
+
+    else:
+        if swap_strategy(score, opponent_score) == 0:
+            swap_diff= opponent_score -(score+x)
+            if swap_diff>3:
+                return 0
+        if not is_swap(score+x, opponent_score):
+            return bacon_strategy(score,opponent_score,3,2)
+        else:
+            return 2
+
     # END Question 10
 
 
