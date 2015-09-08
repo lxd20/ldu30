@@ -300,9 +300,23 @@ def bacon_strategy(score, opponent_score, margin=8, num_rolls=5):
     """This strategy rolls 0 dice if that gives at least MARGIN points,
     and rolls NUM_ROLLS otherwise.
     """
-    # BEGIN Question 8
-    "*** REPLACE THIS LINE ***"
-    return 5  # Replace this statement
+    x = opponent_score % 10
+    y = (opponent_score -x)//10
+    def is_prime(total):
+        x = 2
+        if total == 1 or total ==0:
+            return False
+        while (x < total):
+            if (total % x == 0):
+                return False
+            x = x+1
+        return True
+    if margin-1 <= max (x,y):
+        return 0
+    elif is_prime (max (x,y)+1) == True: 
+        return 0
+    else:
+        return num_rolls  # Replace this statement
     # END Question 8
 
 
