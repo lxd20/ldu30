@@ -300,9 +300,7 @@ def bacon_strategy(score, opponent_score, margin=8, num_rolls=5):
     """This strategy rolls 0 dice if that gives at least MARGIN points,
     and rolls NUM_ROLLS otherwise.
     """
-    if margin-1 <= max (x,y):
-        return 0
-    elif take_turn (0, opponent_score)>margin: 
+    if margin <= take_turn (0, opponent_score): 
         return 0
     else:
         return num_rolls   # Replace this statement
